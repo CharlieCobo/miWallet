@@ -1,10 +1,15 @@
 import { HeroUIProvider } from '@heroui/react';
-import Acordion from './commons/ui/components/acordion';
+import { createBrowserRouter, RouterProvider } from 'react-router';
+import { APP_ROUTES } from './commons/ui/routes';
+
+const router = createBrowserRouter([...APP_ROUTES], {
+  basename: '/miWallet',
+});
 
 function App() {
   return (
     <HeroUIProvider>
-      <Acordion />
+      <RouterProvider router={router} />
     </HeroUIProvider>
   );
 }
