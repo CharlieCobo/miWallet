@@ -1,10 +1,12 @@
-import { Navigate, type RouteObject } from 'react-router';
+import { type RouteObject } from 'react-router';
+import GeneralLayout from '../../commons/ui/layout/general';
+
 import { DASHBOAR_ROUTES } from '../../dashboard/ui/routes';
 
 export const APP_ROUTES: RouteObject[] = [
   {
     path: '/',
-    element: <Navigate to="/dashboard" />,
+    element: <GeneralLayout />,
+    children: [...DASHBOAR_ROUTES],
   },
-  ...DASHBOAR_ROUTES,
 ];
