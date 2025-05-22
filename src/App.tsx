@@ -1,4 +1,4 @@
-import { HeroUIProvider } from '@heroui/react';
+import { HeroUIProvider, ToastProvider } from '@heroui/react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { APP_ROUTES } from './commons/ui/routes';
 
@@ -10,6 +10,7 @@ function App() {
   return (
     <HeroUIProvider>
       <RouterProvider router={router} />
+      <ToastProvider />
     </HeroUIProvider>
   );
 }

@@ -12,16 +12,19 @@ import {
   useDisclosure,
   Textarea,
   Checkbox,
+  addToast,
 } from '@heroui/react';
 import { CirclePlus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
+import { useShallow } from 'zustand/shallow';
 
 import { useIncome } from '../../hooks/use-income';
-import { useShallow } from 'zustand/shallow';
 import { useForm } from '../../../../commons/ui/hooks/use-form';
-import { z } from 'zod';
 
 export const IncomeAcordionBody = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t } = useTranslation();
   const { addIncome, incomes } = useIncome(
     useShallow(state => ({ incomes: state.incomes, addIncome: state.addIncome }))
   );
@@ -35,7 +38,7 @@ export const IncomeAcordionBody = () => {
 
   type AddIncomeFormValues = z.infer<typeof validateForm>;
 
-  const { handleSubmit, handleChange, resetForm, errors } = useForm<AddIncomeFormValues>({
+  const { handleSubmit, handleChange, resetForm, errors, values } = useForm<AddIncomeFormValues>({
     initialValues: {
       name: '',
       value: '',
@@ -45,9 +48,20 @@ export const IncomeAcordionBody = () => {
     schema: validateForm,
     onSubmit: async values => {
       addIncome(values);
-      // Aquí harías la llamada a tu API
+      resetForm();
+      addToast({
+        title: 'Income Added Succesfully',
+        timeout: 3000,
+        shouldShowTimeoutProgress: true,
+        color: 'success',
+      });
     },
   });
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
 
   return (
     <>
@@ -69,7 +83,7 @@ export const IncomeAcordionBody = () => {
         </Button>
       </div>
 
-      <Modal isOpen={isOpen} placement="auto" onClose={onClose}>
+      <Modal isOpen={isOpen} placement="auto" onClose={handleClose}>
         <ModalContent>
           {onClose => (
             <Form className="items-stretch" onReset={resetForm} onSubmit={handleSubmit}>
@@ -84,6 +98,7 @@ export const IncomeAcordionBody = () => {
                     placeholder="Income name"
                     type="text"
                     onChange={handleChange('name')}
+                    value={values.name}
                   />
                   <Input
                     isRequired
@@ -94,6 +109,7 @@ export const IncomeAcordionBody = () => {
                     type="text"
                     className="w-full"
                     onChange={handleChange('value')}
+                    value={values.value}
                   />
                   <Textarea
                     className="w-full"
@@ -101,18 +117,19 @@ export const IncomeAcordionBody = () => {
                     placeholder="Enter your description"
                     name="description"
                     onChange={handleChange('description')}
+                    value={values.description}
                   />
-                  <Checkbox color="primary" onChange={handleChange('isDeductible')}>
+                  <Checkbox color="primary" onChange={handleChange('isDeductible')} isSelected={values.isDeductible}>
                     Is it deductible?
                   </Checkbox>
                 </div>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" type="reset" variant="light" onPress={onClose}>
-                  Close
+                  {t('commons.cancel')}
                 </Button>
                 <Button color="primary" type="submit">
-                  Add
+                  {t('commons.add')}
                 </Button>
               </ModalFooter>
             </Form>
