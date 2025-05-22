@@ -52,12 +52,15 @@ export const IncomeAcordionBody = () => {
   return (
     <>
       <Listbox aria-label="Actions" onAction={key => alert(key)}>
-        {incomes.size &&
+        {Boolean(incomes.size) ? (
           Array.from(incomes.values()).map(({ id, name, value }) => (
             <ListboxItem key={`${id}`} textValue={`${name} - ${value}`}>
               {name} - {value}
             </ListboxItem>
-          ))}
+          ))
+        ) : (
+          <></>
+        )}
       </Listbox>
 
       <div>
