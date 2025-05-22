@@ -2,7 +2,7 @@ import { Accordion, AccordionItem } from '@heroui/react';
 import { BanknoteArrowDown, BanknoteArrowUp, HandCoins } from 'lucide-react';
 import type { SVGProps } from 'react';
 import type { JSX } from 'react/jsx-runtime';
-import { useIncome } from '../../hooks/use-income';
+import { IncomeAcordionBody } from '../../../../income/ui/components/acordion-body';
 
 const InfoIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
   return (
@@ -36,8 +36,6 @@ const InfoIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
 };
 
 export default function Acordion() {
-  const incomes = useIncome(state => state.incomes);
-
   const itemClasses = {
     base: 'py-0 w-full',
     title: 'font-normal text-medium',
@@ -67,7 +65,7 @@ export default function Acordion() {
         }
         title="Income"
       >
-        {JSON.stringify(incomes)}
+        <IncomeAcordionBody />
       </AccordionItem>
       <AccordionItem
         key="2"
